@@ -75,5 +75,3 @@ First tasks.
 		URL : {{host}}/user/{id}
 		
 		
-			
-			
