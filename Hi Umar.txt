@@ -1,0 +1,77 @@
+Welcome, Umar.
+
+First tasks.
+
+19/11/2015
+1. Bikin database di lokal, nama database-nya OlehOlehBali
+2. Buat sebuah tabel bernama 'user'
+3. Attribute dari 'user':
+	- id int (255) AUTO_INCREMENT PRIMARY
+	- email VARCHAR (255)
+	- password VARCHAR (255)
+	- name VARCHAR (255)
+	- gender VARCHAR (6)
+	- address VARCHAR (255)
+	- phone VARCHAR (15)
+	- lost_password_hash VARCHAR (255)
+	- auth_token VARCHAR (255)
+	- is_edited int (1)
+	- created_datetime TIMESTAMP
+	- edited_dateitme TIMESTAMP
+4. Buat fungsi CRUD untuk user
+	- Create
+		Function : Create new account for user
+		METHOD : POST
+		URL : {{host}}/user
+		PARAMETER :
+			> name
+			> gender
+			> email
+			> password
+			
+		RESPONSE :
+			> id
+			> name
+			> gender
+			> email
+			> is_edited
+		
+	- READ
+		Function : Get user detail by id
+		METHOD : GET
+		URL : {{host}}/user/{id}
+		
+		RESPONSE :
+			> id
+			> name
+			> gender
+			> email
+			> address
+			> phone
+		
+	- UPDATE
+		Function : Edit user detail
+		METHOD : PUT
+		URL : {{host}}/user/{id}
+		
+		PARAMETER : 
+			> name
+			> gender
+			> email
+			> address
+			> phone
+			
+		RESPONSE :
+			> id
+			> name
+			> gender
+			> email
+			> address
+			> phone
+			
+	- DELETE
+		Function : Delete user
+		METHOD : DELETE
+		URL : {{host}}/user/{id}
+		
+		
