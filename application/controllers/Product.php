@@ -55,4 +55,110 @@ class Product extends REST_Controller {
 		} 
     }
 
+
+    public function product_post() 
+    {
+    	$id = $this->post('id');
+    	$category = $this->post('category');
+    	$name = $this->post('name');
+    	$description = $this->post('description');
+    	$specification = $this->post('specification');
+    	$price = $this->post('price');
+    	$qty = $this->post('qty');
+    	$isUpdate = $this->post('isUpdate');
+
+    	if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) 
+		{
+				$filename = uniqid();
+				$config['upload_path'] = "./assets/images/";
+				$config['file_name'] = $filename;
+				$config['allowed_types'] = "gif|jpg|png|jpeg";
+				$config['max_size'] = '5120';
+				$config['overwrite'] = false;
+				
+				$this->load->library('upload', $config);
+				
+				if ($this->upload->do_upload('image')) {
+					$upload_data = $this->upload->data();
+					$_POST['image'] = $upload_data;
+
+					$filename = $upload_data['file_name'];
+					$ext = end((explode(".",$filename)));
+
+					$image = $config['file_name'].'.'.$ext;
+				} else {
+					//$error = array('error' => $this->upload->display_errors());
+					$error = array('error' => $this->upload->file_type);
+					//$error = array('error' => $this->response($_FILES));
+					//$data['message']="error =".$error['error'];
+					//continue;  
+
+				$response['status'] = 0;
+				$response['message'] = $error['error'];
+				$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+				}
+		} 
+		else 
+		{
+			$image = "";
+		}
+
+		$syntax;
+		$message;
+
+		if ($isUpdate == false) 
+		{
+			$syntax = " INSERT INTO `product` (
+						`product_category`,
+						`product_name`,
+						`product_description`,
+						`product_specification`,
+						`product_price`,
+						`product_qty`,
+						`product_image`
+					) VALUES (
+						'$category',
+						'$name',
+						'$description',
+						'$specification',
+						'$price',
+						'$qty',
+						'$image'
+					)";
+			$message = "You have successfully inputted a product";
+		}
+		else
+		{
+			$updatingQuery = "";
+			if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) 
+			{
+				$updatingQuery = "`product_image` = '$image',";
+			}
+
+			$syntax = "UPDATE `product` SET 
+						`product_category` = '$category',
+						`product_name`= '$name',
+						`product_description` = '$description',
+						`product_specification` = '$specification',
+						`product_price` = '$price',
+						".$updatingQuery."
+						`product_qty` = '$qty'
+						WHERE product_id = $id
+						";
+			$message = "You have successfully updated a product";
+		}
+
+		$query = $this->db->query($syntax);
+
+		if ($this->db->affected_rows() == 1) {
+			$response['status'] = 1;
+			$response['message'] = $message;
+			$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code	
+		} else {
+			$response['status'] = 0;
+			$response['message'] = "Failed inputting or updating product";
+			$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+		}
+    }
+
 }
