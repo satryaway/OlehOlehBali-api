@@ -75,6 +75,34 @@ class Transaction extends REST_Controller {
 							'$quantity'
 						)");
 			}
+
+			$config = Array(
+			'protocol' => 'smtp',
+ 		   	'smtp_host' => 'ssl://smtp.googlemail.com',
+			'smtp_port' => 465,
+  			'smtp_user' => 'satryaway@gmail.com',
+  			'smtp_pass' => 'key4-gm41l',
+   			'mailtype'  => 'html', 
+   			'charset'   => 'iso-8859-1'
+			);
+
+			$this->load->library('email', $config);
+			$this->email->set_newline("\r\n");
+			$this->email->from('satryaway@gmail.com', 'Euyyy');
+            $this->email->to('satryaway@gmail.com');
+            $this->email->subject('Transaksi Oleh-oleh Bali');
+            $emailContent = "Hello";
+            $this->email->message($emailContent);
+
+            if ($this->email->send()) {
+				$response['status'] = 1;
+                $response['message'] = "Your order has been completed";
+               	$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+			} else {
+                $response['status'] = 0;
+                $response['message'] = "Failed to make an order, please try again later";
+				$this->response($response, REST_Controller::HTTP_); // OK (200) being the HTTP response code
+			}
 		}
 
     }
