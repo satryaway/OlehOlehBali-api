@@ -97,12 +97,12 @@ class Transaction extends REST_Controller {
             if ($this->email->send()) {
 				$response['status'] = 1;
                 $response['message'] = "Your order has been completed";
-               	$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 			} else {
                 $response['status'] = 0;
                 $response['message'] = "Failed to make an order, please try again later";
-				$this->response($response, REST_Controller::HTTP_); // OK (200) being the HTTP response code
 			}
+
+            $this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
 		}
 
     }

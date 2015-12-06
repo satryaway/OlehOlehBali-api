@@ -60,6 +60,7 @@ $route['translate_uri_dashes'] = TRUE;
 */
 $route['product'] = 'product/product';
 $route['transaction'] = 'transaction/transaction';
+$route['auth'] = "member/auth";
 $route['product/c/([a-zA-Z0-9_-]+)'] = 'product/product/c/$1';
 $route['member/([a-zA-Z0-9_-]+)'] = 'member/member/$1';
 

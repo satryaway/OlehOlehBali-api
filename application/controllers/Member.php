@@ -62,4 +62,22 @@ class Member extends REST_Controller {
 		} 
     }
 
+    public function auth_post() {
+    	$email = $this->post('email');
+    	$password = md5($this->post('password'));
+
+    	$query = $this->db->query("SELECT * FROM member WHERE member_email = '$email' && member_password = '$password' ");
+    	if ($query->num_rows() > 0) {
+
+    		$response['status'] = 1;
+                $response['message'] = "You have successfully logged in";
+                $response['return_data'] = $data;
+				$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+			} else {
+				$response['status'] = 0;
+                $response['message'] = "Username and password didn't match";                 
+				$this->response($response, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+			}
+    }
+
 }

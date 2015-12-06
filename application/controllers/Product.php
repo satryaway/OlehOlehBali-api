@@ -37,8 +37,12 @@ class Product extends REST_Controller {
 				foreach ($query->result() as $row) {
 				array_push($data, array(
                         'id' => $row->id,
+						'category' => $row->category,
                         'name' => $row->name,
 						'description' => $row->description,
+						'specification' => $row->specification,
+						'price' => $row->price,
+						'stock' => $row->stock,
 						'image' => $row->image,
 						'created_time' => $row->created_time
 						));
@@ -109,13 +113,13 @@ class Product extends REST_Controller {
 		if ($isUpdate == false) 
 		{
 			$syntax = " INSERT INTO `product` (
-						`product_category`,
-						`product_name`,
-						`product_description`,
-						`product_specification`,
-						`product_price`,
-						`product_qty`,
-						`product_image`
+						`category`,
+						`name`,
+						`description`,
+						`specification`,
+						`price`,
+						`stock`,
+						`image`
 					) VALUES (
 						'$category',
 						'$name',
@@ -132,18 +136,18 @@ class Product extends REST_Controller {
 			$updatingQuery = "";
 			if (isset($_FILES['image']) && !empty($_FILES['image']['name'])) 
 			{
-				$updatingQuery = "`product_image` = '$image',";
+				$updatingQuery = "`image` = '$image',";
 			}
 
 			$syntax = "UPDATE `product` SET 
-						`product_category` = '$category',
-						`product_name`= '$name',
-						`product_description` = '$description',
-						`product_specification` = '$specification',
-						`product_price` = '$price',
+						`category` = '$category',
+						`name`= '$name',
+						`description` = '$description',
+						`specification` = '$specification',
+						`price` = '$price',
 						".$updatingQuery."
-						`product_qty` = '$qty'
-						WHERE product_id = $id
+						`stock` = '$qty'
+						WHERE id = $id
 						";
 			$message = "You have successfully updated a product";
 		}
