@@ -31,6 +31,7 @@ class Transaction extends REST_Controller {
 		$product_id = $this -> post('product_id');
 		$qty = $this -> post('qty');
 		$total = $this -> post('total');
+        $payment_method = $this -> post('payment_method');
 
 		$query = $this->db->query("
                 INSERT INTO `transaction` (
@@ -43,7 +44,8 @@ class Transaction extends REST_Controller {
                     `kab`,
                     `prov`,
                     `postal_code`,
-                    `total`
+                    `total`,
+                    `payment_method`
                 ) VALUES (
                     NULL,
                     '$name',
@@ -54,7 +56,8 @@ class Transaction extends REST_Controller {
                     '$kab',
                     '$prov',
                     '$postal_code',
-                    '$total'
+                    '$total',
+                    '$payment_method'
                 )");
 
 		$transaction_id = $this->db->insert_id();
@@ -80,10 +83,11 @@ class Transaction extends REST_Controller {
 			'protocol' => 'smtp',
  		   	'smtp_host' => 'ssl://smtp.googlemail.com',
 			'smtp_port' => 465,
-  			'smtp_user' => 'satryaway@gmail.com',
-  			'smtp_pass' => 'key4-gm41l',
+  			'smtp_user' => 'jixstreet@gmail.com',
+  			'smtp_pass' => 'Satria.2006',
    			'mailtype'  => 'html', 
-   			'charset'   => 'iso-8859-1'
+   			'charset'   => 'iso-8859-1',
+            'starttls'  => true
 			);
 
 			$this->load->library('email', $config);
@@ -91,13 +95,16 @@ class Transaction extends REST_Controller {
 			$this->email->from('satryaway@gmail.com', 'Euyyy');
             $this->email->to('satryaway@gmail.com');
             $this->email->subject('Transaksi Oleh-oleh Bali');
-            $emailContent = "Hello";
+            $emailContent = "Hello, there is a new order.\n\n";
+            $emailContent .= "From $name\n";
+
             $this->email->message($emailContent);
 
             if ($this->email->send()) {
 				$response['status'] = 1;
                 $response['message'] = "Your order has been completed";
 			} else {
+                show_error($this->email->print_debugger());
                 $response['status'] = 0;
                 $response['message'] = "Failed to make an order, please try again later";
 			}
